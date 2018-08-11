@@ -47,8 +47,7 @@ class GenerateMonster extends Component {
         hoverSelect: event.target.title,
         coordX: event.clientX,
         coordY: event.clientY
-      },
-      () => console.log('set coords', this.state)
+      }
     );
   };
 
@@ -56,8 +55,7 @@ class GenerateMonster extends Component {
     this.setState(
       {
         artistHover: true
-      },
-      () => console.log(this.state.artistHover)
+      }
     );
   };
 
@@ -65,8 +63,7 @@ class GenerateMonster extends Component {
     this.setState(
       {
         artistHover: false
-      },
-      () => console.log(this.state.artistHover)
+      }
     );
   };
 
@@ -83,6 +80,7 @@ class GenerateMonster extends Component {
   };
 
   render() {
+    console.log(this.props)
     return (
       <div className="monster ac">
         <button onClick={this.refreshMonster} className="px1 my1 h5">
@@ -90,7 +88,7 @@ class GenerateMonster extends Component {
         </button>
         {this.displayArtistHover()}
         <img
-          src={this.state.heads.part}
+          src={this.state.heads.url}
           width="100%"
           height="auto"
           className="block mxa"
@@ -101,7 +99,7 @@ class GenerateMonster extends Component {
           onMouseMove={this.setCoords}
         />
         <img
-          src={this.state.hands.part}
+          src={this.state.hands.url}
           width="100%"
           height="auto"
           className="block mxa"
@@ -111,7 +109,7 @@ class GenerateMonster extends Component {
           onMouseMove={this.setCoords}
         />
         <img
-          src={this.state.feet.part}
+          src={this.state.feet.url}
           width="100%"
           height="auto"
           className="block mxa"

@@ -21,8 +21,7 @@ class NavBar extends Component {
     this.setState(
       {
         displayValue: this.props.username
-      },
-      () => console.log('mouseover', this.props)
+      }
     );
   };
 

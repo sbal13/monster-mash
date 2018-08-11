@@ -8,6 +8,8 @@ import SignUp from '../components/SignUp';
 import GenerateMonster from '../components/GenerateMonster';
 import MonsterContainer from '../components/MonsterContainer';
 
+import { connect } from 'react-redux'
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -18,29 +20,29 @@ class App extends Component {
       single: false,
       logged_in: false,
       userid: null,
-      heads: [],
-      body: [],
-      feet: []
+      // heads: [],
+      // body: [],
+      // feet: []
     };
   }
 
-  createPartsArray = (json, partName) => {
-    const partsArray = json.map(part =>
-      Object.assign({}, { part: part.url, username: part.username })
-    );
-    this.setState({ [partName]: partsArray });
-  };
+  // createPartsArray = (json, partName) => {
+  //   const partsArray = json.map(part =>
+  //     Object.assign({}, { part: part.url, username: part.username })
+  //   );
+  //   if(partName === "heads"){}
+  // };
 
   componentDidMount() {
     fetch('https://monster-mash-api.herokuapp.com/api/v1/heads')
       .then(r => r.json())
-      .then(r => this.createPartsArray(r, 'heads'));
+      .then(heads => this.props.addHeads(heads));
     fetch('https://monster-mash-api.herokuapp.com/api/v1/hands')
       .then(r => r.json())
-      .then(r => this.createPartsArray(r, 'body'));
+      .then(bodies => this.props.addBodies(bodies));
     fetch('https://monster-mash-api.herokuapp.com/api/v1/feet')
       .then(r => r.json())
-      .then(r => this.createPartsArray(r, 'feet'));
+      .then(feet => this.props.addFeet(feet));
 
     let token = localStorage.getItem('token');
     if (token && token !== 'undefined') {
@@ -132,6 +134,7 @@ class App extends Component {
   };
 
   render() {
+    console.log("APP PROPS", this.props)
     return (
       <Router>
         <div className="App">
@@ -142,9 +145,9 @@ class App extends Component {
               path="/"
               component={() => (
                 <GenerateMonster
-                  heads={this.state.heads}
-                  body={this.state.body}
-                  feet={this.state.feet}
+                  heads={this.props.heads}
+                  body={this.props.bodies}
+                  feet={this.props.feet}
                 />
               )}
             />
@@ -210,4 +213,28 @@ class App extends Component {
   }
 }
 
-export default App;
+function msp(state){
+  return {
+    heads: state.heads,
+    bodies: state.bodies,
+    feet: state.feet,
+  }
+}
+
+function mdp(dispatch){
+  console.log("MDP", dispatch)
+  return {
+    addHeads: (headsData) => {
+      dispatch({type: "ADD_HEADS", payload: headsData })
+    },
+    addBodies: (bodiesData) => {
+      dispatch({type: "ADD_BODIES", payload: bodiesData })
+    },
+    addFeet: (feetData) => {
+      dispatch({type: "ADD_FEET", payload: feetData })
+    }
+  }
+}
+
+
+export default connect(msp, mdp)(App);
